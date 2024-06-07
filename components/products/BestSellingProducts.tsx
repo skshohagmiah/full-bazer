@@ -68,7 +68,7 @@ const BestSellingProducts = () => {
           <Link
             href={"/shop/${product.id}"}
             key={product.id}
-            className=" border dark:border-none rounded-lg  bg-white dark:bg-slate-800 relative group overflow-hidden"
+            className=" border dark:border-none rounded-lg  bg-white dark:bg-slate-800 relative group overflow-hidden p-2"
           >
            <div className="overflow-hidden w-full h-[12rem] md:h-[14rem] relative p-4">
            <Image

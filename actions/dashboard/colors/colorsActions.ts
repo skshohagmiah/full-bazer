@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export async function createColor(name:string,value:string){
     try {
-       await prisma.Color.create({
+       await prisma.color.create({
         data:{
             name,
             value,
@@ -29,7 +29,7 @@ export async function createColor(name:string,value:string){
 
 export async function updateColor(id:string,name:string,value:string){
     try {
-       await prisma.Color.update({
+       await prisma.color.update({
         where:{
             id
         },
@@ -56,7 +56,7 @@ export async function updateColor(id:string,name:string,value:string){
 
 export async function deleteColor(id:string){
     try {
-        await prisma.Color.delete({
+        await prisma.color.delete({
             where:{id}
         })
 
