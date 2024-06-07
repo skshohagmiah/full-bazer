@@ -33,7 +33,7 @@ const formSchema = z.object({
 export default function ShippingAddressForm() {
   const { shippingAddress, setShippingAddress } = useShoppingCart();
   
-  const form = useForm<formSchema>({
+  const form = useForm<typeof formSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       address: shippingAddress?.address || "",

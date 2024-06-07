@@ -1,8 +1,12 @@
-
 "use client";
 
 import React from "react";
-import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +26,6 @@ const CartPage = () => {
     calculateShipping,
     calculateTax,
   } = useShoppingCart();
-
 
   const dummyData = [
     {
@@ -120,91 +123,103 @@ const CartPage = () => {
   ];
 
   return (
-    <MaxWidthWrapper className=" py-8">
-      <h1 className="text-4xl font-bold">Shopping Cart</h1>
-      <small className="block mb-8">Manage your shopping cart items</small>
+    <section className="bg-white py-8 dark:bg-slate-900 my-4">
+      <MaxWidthWrapper className="px-4">
+        <h1 className="text-4xl font-bold">Shopping Cart</h1>
+        <small className="block mb-8">Manage your shopping cart items</small>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          {dummyData.length > 0 ? (
-            dummyData.map((item) => (
-              <Card key={item.product.id} className="mb-6 flex items-center justify-between gap-2">
-                <div className="w-full flex items-center gap-2">
-                  <Image
-                    src={item.product.images[0].url}
-                    alt={item.product.name}
-                    width={128}
-                    height={128}
-                    className="w-32 h-32 object-cover"
-                  />
-                  <CardContent className="w-full flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">{item.product.name}</h2>
-                    <p className="text-xl font-semibold">${(item.price / 100).toFixed(2)}</p>
-                    <div className="flex items-center">
-                      <Label htmlFor={`quantity-${item.product.id}`} className="mr-2">
-                        Quantity:
-                      </Label>
-                      <Input
-                        id={`quantity-${item.product.id}`}
-                        type="number"
-                        value={item.quantity}
-                        // onChange={(e) =>
-                        //   updateItemQuantity(item.product.id, item.size, item.color, parseInt(e.target.value))
-                        // }
-                        className="w-16 mr-4"
-                      />
-                    </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-4">
+            {dummyData.length > 0 ? (
+              dummyData.map((item) => (
+                <Card
+                  key={item.product.id}
+                  className="flex items-center justify-between gap-2"
+                >
+                  <div className="w-full flex items-center gap-2">
+                    <Image
+                      src={item.product.images[0].url}
+                      alt={item.product.name}
+                      width={128}
+                      height={128}
+                      className="w-32 h-32 object-cover"
+                    />
+                    <CardContent className="w-full flex flex-wrap gap-2 items-center justify-between py-0">
+                      <h2 className="text-2xl font-bold">
+                        {item.product.name}
+                      </h2>
+                      <p className="text-xl font-semibold">
+                        ${(item.price / 100).toFixed(2)}
+                      </p>
+                      <div className="flex items-center">
+                        <Label
+                          htmlFor={`quantity-${item.product.id}`}
+                          className="mr-2"
+                        >
+                          Quantity:
+                        </Label>
+                        <Input
+                          id={`quantity-${item.product.id}`}
+                          type="number"
+                          value={item.quantity}
+                          // onChange={(e) =>
+                          //   updateItemQuantity(item.product.id, item.size, item.color, parseInt(e.target.value))
+                          // }
+                          className="w-16 mr-4"
+                        />
+                      </div>
                       <Button
                         variant="outline"
                         // onClick={() => removeItem(item.product, item.size, item.color)}
                       >
                         Remove
                       </Button>
-                  </CardContent>
-                </div>
-              </Card>
-            ))
-          ) : (
-            <p>Your cart is empty.</p>
-          )}
-        </div>
+                    </CardContent>
+                  </div>
+                </Card>
+              ))
+            ) : (
+              <p>Your cart is empty.</p>
+            )}
+          </div>
 
-        <div>
-          <Card>
-            <CardHeader>
-              <h2 className="text-2xl font-bold">Order Summary</h2>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-between mb-4">
-                <p>Subtotal</p>
-                <p>${(calculateSubTotal() / 100).toFixed(2)}</p>
-              </div>
-              <div className="flex justify-between mb-4">
-                <p>Discount</p>
-                <p>${(calculateDiscount() / 100).toFixed(2)}</p>
-              </div>
-              <div className="flex justify-between mb-4">
-                <p>Shipping</p>
-                <p>${(calculateShipping() / 100).toFixed(2)}</p>
-              </div>
-              <div className="flex justify-between mb-4">
-                <p>Tax</p>
-                <p>${(calculateTax() / 100).toFixed(2)}</p>
-              </div>
-              <div className="flex justify-between font-bold text-xl">
-                <p>Total</p>
-                <p>${(calculateTotal() / 100).toFixed(2)}</p>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full" size={'lg'}>
-                <Link href={'/checkout'}>Proceed to Checkout</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+          <div>
+            <Card>
+              <CardHeader>
+                <h2 className="text-2xl font-bold">Order Summary</h2>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between mb-4">
+                  <p>Subtotal</p>
+                  <p>${(calculateSubTotal() / 100).toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <p>Discount</p>
+                  <p>${(calculateDiscount() / 100).toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <p>Shipping</p>
+                  <p>${(calculateShipping() / 100).toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between mb-4">
+                  <p>Tax</p>
+                  <p>${(calculateTax() / 100).toFixed(2)}</p>
+                </div>
+                <div className="flex justify-between font-bold text-xl">
+                  <p>Total</p>
+                  <p>${(calculateTotal() / 100).toFixed(2)}</p>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full" size={"lg"}>
+                  <Link href={"/checkout"}>Proceed to Checkout</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          </div>
         </div>
-      </div>
-    </MaxWidthWrapper>
+      </MaxWidthWrapper>
+    </section>
   );
 };
 
