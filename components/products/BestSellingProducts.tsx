@@ -58,30 +58,30 @@ const BestSellingProducts = () => {
   return (
     <div className="p-4 md:col-span-2 bg-white dark:bg-slate-900 space-y-4">
       <div className="flex items-center justify-between">
-      <h2 className="text-2xl font-semibold">Best Selling Products</h2>
+      <h2 className="text-2xl font-semibold">Most Selling Products</h2>
       <div className="p-1 bg-blue-500 rounded-full text-white hover:bg-blue-600 hover:cursor-pointer">
         <ChevronRight />
       </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
         {featuredProducts.map((product) => (
           <Link
             href={"/shop/${product.id}"}
             key={product.id}
-            className=" border dark:border-none rounded-lg  bg-white dark:bg-slate-800 relative group overflow-hidden p-2"
+            className=" border dark:border-none rounded-lg pb-2  bg-white dark:bg-slate-800 relative group overflow-hidden"
           >
-           <div className="overflow-hidden w-full h-[12rem] md:h-[14rem] relative p-4">
+           <div className="overflow-hidden w-full h-[10rem] md:h-[14rem] relative p-4">
            <Image
               src={product.image}
               alt={product.title}
               fill
-              className="object-cover text-center group-hover:scale-110 transition-transform duration-150 ease-in-out"
+              className="object-contain md:object-cover text-center group-hover:scale-110 transition-transform duration-150 ease-in-out"
             />
            </div>
-           <div className="p-4">
+           <div className="md:p-4">
            <h3 className="text-center">{product.title}</h3>
-            <p className="text-lg font-medium text-center">
-              Upto {product.discountedPrice}% Off
+            <p className="md:text-lg font-medium text-center">
+              Upto <span className="text-green-500">{product.discountedPrice}</span>% Off
             </p>
            </div>
 

@@ -8,7 +8,7 @@ import React from "react";
 const Mainlayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="bg-slate-200 dark:bg-slate-800">
-      <TopHeaderInfoBar />
+      {/* <TopHeaderInfoBar /> */}
       <Topheader />
       <NavigationHeader />
       {children}

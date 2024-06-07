@@ -98,8 +98,13 @@ const Topheader = () => {
         showMenu && "border-b-2 dark:border-slate-800"
       )}
     >
-      <MaxWidthWrapper className="flex  items-center justify-between py-4 h-20 lg:h-24 px-4 lg:px-2">
-        <Logo />
+      <MaxWidthWrapper className="flex  items-center justify-between py-4 h-16 lg:h-24 px-4 lg:px-2">
+        <div className="flex items-center gap-2">
+          {/* Render the mobile header */}
+          <MobileHeader />
+
+          <Logo />
+        </div>
 
         {/* Render the navigation links */}
         {showMenu && !showSearchBar ? (
@@ -128,13 +133,13 @@ const Topheader = () => {
         {showSearchBar && (
           <div className="absolute inset-0 z-50 bg-white flex items-center justify-center gap-2 w-full h-ful dark:bg-slate-950 lg:hidden px-2">
             <SearchBar />
-            <Button size={'icon'} variant={'link'}>
-                {" "}
-                <X
-                  onClick={() => setShowSearchBar(false)}
-                  className="whitespace-nowrap w-6 h-6"
-                />
-              </Button>
+            <Button size={"icon"} variant={"link"}>
+              {" "}
+              <X
+                onClick={() => setShowSearchBar(false)}
+                className="whitespace-nowrap w-6 h-6"
+              />
+            </Button>
           </div>
         )}
 
@@ -147,35 +152,31 @@ const Topheader = () => {
 
           {/* Show the search icon and close icon on larger screens */}
           {showMenu && !showSearchBar ? (
-            <Search
-              className="hidden lg:block"
+            <Button className="hidden lg:flex rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-black dark:text-white items-center justify-center" size={'icon'} variant={'link'}>
+              <Search           
               onClick={() => setShowSearchBar(true)}
             />
+            </Button>
           ) : (
             showSearchBar && (
-              <Button size={'icon'} variant={'link'}>
+              <Button size={"icon"} variant={"link"}  className="hidden lg:flex rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-black dark:text-white items-center justify-center">
                 {" "}
                 <X
                   onClick={() => setShowSearchBar(false)}
-                  className="whitespace-nowrap w-6 h-6"
                 />
               </Button>
             )
           )}
 
-          <div className="hidden lg:block">
+          <div className="hidden lg:flex items-end justify-end">
             {/* Render the dark mode toggle */}
             <ModeToggle />
-
-            {/* Render the user options */}
-            <UserOptions />
           </div>
 
+          {/* Render user account options */}
+          <UserOptions />
           {/* Render the shopping cart */}
           <ShoppingCart />
-
-          {/* Render the mobile header */}
-          <MobileHeader />
         </div>
       </MaxWidthWrapper>
     </header>

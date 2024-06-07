@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from 'next/navigation';
+import MaxWidthWrapper from "./MaxWidthWrapper";
 
 interface PaginationProps {
   totalItems: number;
@@ -26,7 +27,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-between md:justify-center space-x-2">
+    <MaxWidthWrapper className="flex items-center justify-between md:justify-center space-x-2">
       <Button
         variant="outline"
         onClick={() => handlePageChange(currentPage - 1)}
@@ -54,7 +55,7 @@ const Pagination: React.FC<PaginationProps> = ({
       >
         Next
       </Button>
-    </div>
+    </MaxWidthWrapper>
   );
 };
 

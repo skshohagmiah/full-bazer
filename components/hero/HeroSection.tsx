@@ -117,14 +117,14 @@ const HeroSection: React.FC = () => {
               className="brightness-75"
             />
             {/* Slide Content */}
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center md:text-start space-y-2">
+            <div className="absolute top-1/2 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 text-center md:text-start space-y-2 p-4 md:p-0">
               <p className="text-xl md:text-2xl text-white text-white/80">
                 {slide.offerText}
               </p>
-              <h1 className="text-3xl md:text-6xl text-lime-400 font-extrabold  mb-4">
+              <h1 className="text-3xl md:text-6xl text-lime-400 font-extrabold  md:mb-4">
                 {slide.title}
               </h1>
-              <p className="text-lg md:text-xl text-gray-100 whitespace-nowrap">
+              <p className="text-lg md:text-xl text-gray-100">
                 {slide.subtitle}
               </p>
               <Button

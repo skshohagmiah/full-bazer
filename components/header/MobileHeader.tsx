@@ -8,24 +8,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  Heart,
-  LogOut,
+
   Menu,
-  RefreshCcw,
-  ShoppingBag,
-  User,
+
 } from "lucide-react";
 import {
-  Shirt,
-  Baby,
-  Tag,
+
   Home,
   Store,
   Info,
   Phone,
-  Filter,
-  Search,
-  X,
 } from "lucide-react";
 import Link from "next/link";
 import { FaBlog } from "react-icons/fa";
@@ -92,13 +84,11 @@ const MobileHeader = () => {
           <Menu />
         </SheetTrigger>
         {/* Menu content */}
-        <SheetContent className="flex justify-center">
-          <SheetHeader>
-            <SheetTitle>Header</SheetTitle>
-            <Separator />
-            <SheetDescription>
+        <SheetContent className="flex justify-center" side={'left'}>
+          <SheetHeader className="w-full">
+            <SheetDescription className="w-full">
               {/* Navigation links */}
-              <ul className="flex flex-col items-start gap-2">
+              <ul className="flex flex-col items-start gap-2 w-full">
                 {navLinks.map((link) => (
                   <li key={link.name}>
                     {/* Navigation link */}
@@ -117,61 +107,7 @@ const MobileHeader = () => {
                 <Separator />
                 <div className="flex items-center gap-2">
                   {/* Theme toggle */}
-                  <ModeToggle /> Change Theme
-                </div>
-                <Separator />
-                {/* User account options */}
-                <div>
-                  <h2 className="text-xl my-2 text-start">User Account</h2>
-                  {/* Profile link */}
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start"
-                    onClick={() => router.push("/profile")}
-                  >
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </Button>
-
-                  {/* Compare link */}
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start"
-                    onClick={() => router.push("/compare")}
-                  >
-                    <RefreshCcw className="mr-2 h-4 w-4" />
-                    Compare
-                  </Button>
-
-                  {/* Wishlist link */}
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start"
-                    onClick={() => router.push("/wishlist")}
-                  >
-                    <Heart className="mr-2 h-4 w-4" />
-                    My Wishlist
-                  </Button>
-                  {/* Orders link */}
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start"
-                    onClick={() => router.push("/orders")}
-                  >
-                    <ShoppingBag className="mr-2 h-4 w-4" />
-                    My Orders
-                  </Button>
-
-                  <Separator className="my-2" />
-                  {/* Logout link */}
-                  <Button
-                    variant="destructive"
-                    className="w-full justify-start"
-                    onClick={() => signOut()}
-                  >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Log out
-                  </Button>
+                  <ModeToggle /> Theme
                 </div>
               </ul>
             </SheetDescription>

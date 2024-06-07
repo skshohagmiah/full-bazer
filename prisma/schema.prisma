@@ -56,6 +56,14 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+
+model resetToken {
+id         String @id @default(auto()) @map("_id") @db.ObjectId
+token String
+expires Int
+createdAt DateTime @default(now())
+}
+
 model Address {
   id         String @id @default(auto()) @map("_id") @db.ObjectId
   street     String
@@ -321,4 +329,20 @@ model CouponCode {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+enum NotificationType {
+  Info
+  Warning
+  Error
+}
+
+model Notification {
+    id             String    @id @default(auto()) @map("_id") @db.ObjectId
+    message String
+    sender String?
+    read Boolean
+    type NotificationType @default(Info)
+    createdAt DateTime @default(now())
 }

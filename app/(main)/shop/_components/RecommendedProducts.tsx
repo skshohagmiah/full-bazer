@@ -49,9 +49,9 @@ const RecommendedProducts = () => {
       ];
 
   return (
-    <MaxWidthWrapper className='py-4'>
-        <h2 className='text-3xl font-semibold my-6'>Recommended products for you</h2>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
+    <MaxWidthWrapper className='p-4'>
+        <h2 className='text-2xl md:text-3xl font-semibold my-6'>Recommended products for you</h2>
+        <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8'>
             {featuredProducts.map(product => (
                 <SingleProduct key={product.id} product={product}/>
             ))}

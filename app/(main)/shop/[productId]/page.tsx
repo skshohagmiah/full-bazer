@@ -87,12 +87,12 @@ const SingleProductPage = () => {
     <section className="bg-white dark:bg-slate-950 text-black dark:text-white">
       <ProductIdHeading />
 
-      <MaxWidthWrapper className="py-8">
+      <MaxWidthWrapper className="py-8 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* product images */}
-          <div className="flex items-start gap-2">
+          <div className="flex flex-col-reverse md:flex-row items-start gap-2">
             {/* Thumbnail Images */}
-            <div className="flex flex-col justify-center items-center space-y-2">
+            <div className="flex md:flex-col justify-center items-center gap-2">
               {product.images.map((image, index) => (
                 <div
                   key={index}
@@ -109,7 +109,7 @@ const SingleProductPage = () => {
               ))}
             </div>
             {/* Main Image */}
-            <Card className="w-full md:max-w-[600px] md:w-[600px] md:h-[600px] bg-gray-200 relative rounded-md overflow-hidden">
+            <Card className="w-full  h-[300px] md:max-w-[600px] md:w-[600px] md:h-[600px] bg-gray-200 relative rounded-md overflow-hidden">
               <Image
                 src={selectedImage}
                 alt={product.name}
@@ -145,7 +145,7 @@ const SingleProductPage = () => {
                 </p>
               </div>
 
-              <p className="text-rose-500 px-2 bg-gray-200 dark:bg-gray-600 rounded-md w-fit ">
+              <p className="text-rose-600 px-2 bg-gray-200 dark:bg-gray-600 rounded w-fit ">
                 Only 10 left in stock - order soon
               </p>
             </div>

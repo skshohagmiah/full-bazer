@@ -9,19 +9,20 @@ import {
   import { Button } from "@/components/ui/button";
   import { List, Grid } from "lucide-react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import MobileSidebar from './MobileSidebar';
 
 const SortOptions = () => {
 
     const [view, setView] = useState("grid"); // For toggling between grid and list views
 
   return (
-    <div className="mb-4 w-full flex flex-col md:flex-row items-center justify-between gap-2">
-    <div className="flex items-center mb-4 md:mb-0">
+    <div className="mb-4 w-full flex flex-wrap items-center justify-between gap-2 whitespace-nowrap px-2">
+    <div className="flex items-center ">
       <label htmlFor="sort" className="mr-2 font-semibold whitespace-nowrap">
         Sort by:
       </label>
       <Select  defaultValue="">
-        <SelectTrigger>
+        <SelectTrigger className='flex items-center justify-center'>
           <SelectValue placeholder="Select" />
         </SelectTrigger>
         <SelectContent>
@@ -32,7 +33,7 @@ const SortOptions = () => {
         </SelectContent>
       </Select>
     </div>
-    <div>
+    <div className='hidden md:block'>
       <Button
         onClick={() => setView("grid")}
         className={`mr-2 ${
@@ -50,6 +51,7 @@ const SortOptions = () => {
         List View
       </Button>
     </div>
+    <MobileSidebar />
   </div>
   )
 }

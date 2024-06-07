@@ -55,7 +55,7 @@ const NavigationHeader = () => {
         <div className="flex justify-between items-center">
           {/* Category Hover */}
           <HoverCard>
-            <HoverCardTrigger asChild className="bg-blue-600 dark:bg-slate-700 py-4 px-8">
+            <HoverCardTrigger asChild className="bg-green-400 dark:bg-slate-700 py-4 px-8">
               <Link
                 href="#"
                 className="group flex items-center gap-2 text-lg font-medium hover:text-blue-200"
@@ -82,7 +82,7 @@ const NavigationHeader = () => {
 
           {/* Navigation Links */}
           <nav className="flex space-x-8 text-base">
-            <ul className="flex items-center gap-6">
+            <ul className="flex items-center gap-6 px-2">
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link

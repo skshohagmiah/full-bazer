@@ -20,6 +20,7 @@ import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import BlogsHeading from "./_components/BlogsHeading";
+import MaxWidthWrapper from "@/components/others/MaxWidthWrapper";
 // import { Blog } from "@prisma/client";
 
 interface BlogPost {
@@ -135,8 +136,8 @@ export default function Blog() {
   return (
     <div className="bg-white dark:bg-slate-900 text-black dark:text-white">
       <BlogsHeading />
-      <div className="container mx-auto py-12 px-4">
-        <div className="flex flex-col-reverse lg:flex-row gap-8">
+      <MaxWidthWrapper className="py-12 px-4">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-8">
           {/* All Blog Posts (Grid) */}
           <div className="lg:w-3/4 space-y-6">
             {/* Display all filtered posts */}
@@ -209,7 +210,7 @@ export default function Blog() {
             </Card>
           </div>
         </div>
-      </div>
+      </MaxWidthWrapper>
     </div>
   );
 }

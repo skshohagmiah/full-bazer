@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 const SearchBar = () => {
   return (
     <form
-      className="relative border dark:border-gray-500 rounded-full py-1.5 pl-10 pr-4 w-[30rem] flex items-center shadow-md 
+      className="relative border dark:border-gray-500 rounded-full md:py-1.5 pl-10 md:pr-4 w-[30rem] flex items-center shadow-md 
                  focus-within:ring-2 focus-within:ring-blue-500 transition-all duration-200"
     >
       {/* Search Icon */}

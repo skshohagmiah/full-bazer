@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import BlogsHeading from "../_components/BlogsHeading";
 
 // Dummy data for the blog
 const blog = {
@@ -67,8 +68,9 @@ const BlogDetailsPage = () => {
   };
 
   return (
-    <section className="bg-white dark:bg-slate-950 text-black dark:text-white py-8">
-      <div className="max-w-4xl mx-auto px-4">
+    <section className="bg-white dark:bg-slate-950 text-black dark:text-white">
+      <BlogsHeading />
+      <div className="max-w-4xl mx-auto py-8 px-4">
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
           <div className="flex items-center space-x-4 mb-4">
@@ -111,7 +113,7 @@ const BlogDetailsPage = () => {
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Comments</h2>
           {comments.map((comment, index) => (
-            <Card key={index} className="mb-4 flex items-center justify-center gap-2">
+            <Card key={index} className="mb-4 flex flex-col md:flex-row items-center justify-center gap-2">
               <CardHeader className="flex items-center flex-row space-x-4">
                 <Avatar>
                   <AvatarImage src={comment.avatar} alt={comment.user} />

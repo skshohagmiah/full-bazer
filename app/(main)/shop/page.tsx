@@ -63,55 +63,57 @@ const Shop = () => {
 
   const productsPerPage = 8; // Number of products per page
 
-  useEffect(() => {
-    const categoriesParam = searchParams.get("categories")?.split(",") || [];
-    const minPrice = Number(searchParams.get("minPrice")) || 0;
-    const maxPrice = Number(searchParams.get("maxPrice")) || 1000;
-    const rating = Number(searchParams.get("rating")) || 0;
+  // useEffect(() => {
+  //   const categoriesParam = searchParams.get("categories")?.split(",") || [];
+  //   const minPrice = Number(searchParams.get("minPrice")) || 0;
+  //   const maxPrice = Number(searchParams.get("maxPrice")) || 1000;
+  //   const rating = Number(searchParams.get("rating")) || 0;
 
-    const filtered = featuredProducts.filter((product) => {
-      const inCategory =
-        categoriesParam.length === 0 ||
-        categoriesParam.includes(product.category);
-      const inPriceRange =
-        product.price >= minPrice && product.price <= maxPrice;
-      const meetsRating = product.rating >= rating;
-      return inCategory && inPriceRange && meetsRating;
-    });
+  //   const filtered = featuredProducts.filter((product) => {
+  //     const inCategory =
+  //       categoriesParam.length === 0 ||
+  //       categoriesParam.includes(product.category);
+  //     const inPriceRange =
+  //       product.price >= minPrice && product.price <= maxPrice;
+  //     const meetsRating = product.rating >= rating;
+  //     return inCategory && inPriceRange && meetsRating;
+  //   });
 
-    setFilteredProducts(filtered);
-  }, [searchParams]);
+  //   setFilteredProducts(filtered);
+  // }, [searchParams]);
 
-  // Handle sorting
-  useEffect(() => {
-    let sortedProducts = [...filteredProducts];
-    if (sortOption === "price-asc") {
-      sortedProducts.sort((a, b) => a.price - b.price);
-    } else if (sortOption === "price-desc") {
-      sortedProducts.sort((a, b) => b.price - a.price);
-    } else if (sortOption === "rating") {
-      sortedProducts.sort((a, b) => b.rating - a.rating);
-    }
-    setFilteredProducts(sortedProducts);
-  }, [sortOption]);
+  // // Handle sorting
+  // useEffect(() => {
+  //   let sortedProducts = [...filteredProducts];
+  //   if (sortOption === "price-asc") {
+  //     sortedProducts.sort((a, b) => a.price - b.price);
+  //   } else if (sortOption === "price-desc") {
+  //     sortedProducts.sort((a, b) => b.price - a.price);
+  //   } else if (sortOption === "rating") {
+  //     sortedProducts.sort((a, b) => b.rating - a.rating);
+  //   }
+  //   setFilteredProducts(sortedProducts);
+  // }, [sortOption]);
 
-  // Handle pagination
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  // // Handle pagination
+  // const indexOfLastProduct = currentPage * productsPerPage;
+  // const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  // const currentProducts = filteredProducts.slice(
+  //   indexOfFirstProduct,
+  //   indexOfLastProduct
+  // );
 
   return (
     <div className="bg-white dark:bg-gray-900 space-y-4 py-4">
       <SidebarHeading />
       <MaxWidthWrapper className="flex items-start gap-2 justify-between">
+        <div className="hidden md:block">
         <ShopSidebar categories={categories} />
+        </div>
         <div className="">
             <SortOptions />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 border">
-            {currentProducts.map((product) => (
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6 p-4 border">
+            {featuredProducts.map((product) => (
               <SingleProduct key={product.id} product={product} />
             ))}
           </div>

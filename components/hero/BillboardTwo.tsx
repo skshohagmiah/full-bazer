@@ -14,11 +14,11 @@ const BillboardTwo = () => {
           className="brightness-75 object-cover"
         />
         {/* Slide Content */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-start space-y-2">
-          <h1 className="text-2xl md:text-4xl text-yellow-400 font-extrabold  mb-4">
-            The Perfect Fit for Every Foot
+        <div className="absolute top-1/2 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 text-center md:text-start space-y-2 p-4 md:p-0">
+          <h1 className="text-2xl md:text-4xl text-yellow-400 font-extrabold  md:mb-4">
+            The Perfect Fit for Every Foot 
           </h1>
-          <p className="text-lg md:text-xl text-gray-100">
+          <p className="text-lg md:text-xl text-gray-100 word-wrap">
             Explore our wide range of comfortable and stylish footwear for men,
             women, and kids.
           </p>

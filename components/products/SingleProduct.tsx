@@ -32,18 +32,18 @@ const SingleProduct = ({ product }) => {
         className="object-cover group-hover:scale-110 transition-transform duration-150 ease-in-out overflow-hidden"
       />
      </div>
-      <div className="p-6 flex items-center justify-between text-start">
+      <div className="p-2 md:p-6 flex flex-col md:flex-row items-start  justify-between text-start">
       <div>
         <small className="text-muted-foreground">{product.category} || category</small>
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+      <h3 className=" md:text-lg font-semibold text-gray-800 dark:text-gray-100">
           {product.title}
         </h3>
-        <div className="flex items-center justify-start ">
+        <div className="flex items-center justify-start md:justify-between ">
           <Star className="h-5 w-5 text-yellow-500" />
           <span className="text-gray-800 dark:text-gray-100 ml-1">
             {product.rating}
           </span>
-          <span className="text-gray-500 dark:text-gray-400 ml-2">
+          <span className="text-gray-500 dark:text-gray-400 ml-2 hidden md:block whitespace-nowrap">
             ({product.reviews} reviews)
           </span>
         </div>

@@ -53,7 +53,7 @@ const FeaturedProducts = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">
           Featured Products
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
           {featuredProducts.map((product) => (
             <SingleProduct key={product.id} product={product} />
           ))}
