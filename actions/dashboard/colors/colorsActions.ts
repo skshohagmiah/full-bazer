@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/db";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 import { revalidatePath } from "next/cache";
 
 
@@ -56,6 +57,32 @@ export async function updateColor(id:string,name:string,value:string){
 
 export async function deleteColor(id:string){
     try {
+
+        const currentUser = await getCurrentUser();
+        if(currentUser?.role !== "SUPER_ADMIN") {
+            return {
+                status: 400,
+                message: "You don't have permission to delete this color.",
+            };
+        }
+
+        const colorInUse = await prisma.color.findUnique({
+            where:{
+                id
+            },
+            include:{
+                productsVariants:true
+            }
+        });
+
+
+        if(colorInUse?.productsVariants?.length !== 0){
+            return {
+                status: 400,
+                message: "Color is in use. you cannot delete it.",
+            };
+        }
+
         await prisma.color.delete({
             where:{id}
         })

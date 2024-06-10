@@ -48,16 +48,17 @@ export default function GeneralSettings({ initialData }: GeneralSettingsProps) {
       brandName: "",
       faviconImage: "",
       logoImage: "",
+      phone: "",
     },
   });
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data)
-    const res = await updateOrCreateGeneralSettings(data!)
-    if(res.status === 200){
+    console.log(data);
+    const res = await updateOrCreateGeneralSettings(data!);
+    if (res.status === 200) {
       toast(res.message);
-      router.refresh()
-    }else{
-      toast(res.message)
+      router.refresh();
+    } else {
+      toast(res.message);
     }
   };
 
@@ -111,8 +112,25 @@ export default function GeneralSettings({ initialData }: GeneralSettingsProps) {
                     <Input placeholder="Site Logo Name" {...field} />
                   </FormControl>
                   <FormDescription>
-                    This brandName name will be in the site logo, if you have logo
-                    as image then you can skip this step
+                    This brandName name will be in the site logo, if you have
+                    logo as image then you can skip this step
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Offical phone number</FormLabel>
+                  <FormControl>
+                    <Input placeholder="01865905625" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    This number will be in the navigation header for any customer call
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -130,10 +148,18 @@ export default function GeneralSettings({ initialData }: GeneralSettingsProps) {
                     <UploadDropzone
                       endpoint={"logoImage"}
                       className="w-full dark:border-gray-500"
-                      onClientUploadComplete={res => field.onChange(res[0].url)}
+                      onClientUploadComplete={(res) =>
+                        field.onChange(res[0].url)
+                      }
                     />
                   </FormControl>
-                  <Image className="border p-2 flex item-center justify-center" src={field.value} width={100} height={100} alt="logo" />
+                  <Image
+                    className="border p-2 flex item-center justify-center"
+                    src={field.value}
+                    width={100}
+                    height={100}
+                    alt="logo"
+                  />
                   <FormDescription>This is the Logo Image</FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -149,10 +175,18 @@ export default function GeneralSettings({ initialData }: GeneralSettingsProps) {
                     <UploadDropzone
                       endpoint={"feviconImage"}
                       className="w-full dark:border-gray-500"
-                      onClientUploadComplete={res => field.onChange(res[0].url)}
+                      onClientUploadComplete={(res) =>
+                        field.onChange(res[0].url)
+                      }
                     />
                   </FormControl>
-                  <Image className="border p-2 flex item-center justify-center" src={field.value} width={100} height={100} alt="logo" />
+                  <Image
+                    className="border p-2 flex item-center justify-center"
+                    src={field.value}
+                    width={100}
+                    height={100}
+                    alt="logo"
+                  />
                   <FormDescription>
                     This Image will be shown in the browser tab-bar
                   </FormDescription>

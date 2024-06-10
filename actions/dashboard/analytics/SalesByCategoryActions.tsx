@@ -25,13 +25,19 @@ export async function getSalesByCategoryData() {
             },
           },
         },
+        product:true
       },
     });
   
     const salesByCategoryData: CategorySalesData[] = categories.map(
       (category) => {
-        const categorySales = orderItems.filter(
-          (item) => item.productVariant.product.categoryId === category.id
+        const categorySales = orderItems.filter((item) => {
+          if(item.productVariant){
+            return item?.productVariant.product.categoryId === category.id
+          }else {
+            return item?.product?.categoryId === category.id
+          }
+        }
         );
   
         const totalSales = categorySales.reduce(

@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from "@/lib/db";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 import { revalidatePath } from "next/cache";
 
 
@@ -56,6 +57,33 @@ export async function updateSize(id:string,name:string,value:string){
 
 export async function deleteSize(id:string){
     try {
+
+        const currentUser = await getCurrentUser();
+
+        if(currentUser?.role !== "SUPER_ADMIN") {
+            return {
+                status: 400,
+                message: "You don't have permission to delete this size.",
+            };
+        }
+
+        const sizeInUse = await prisma.size.findUnique({
+            where:{
+                id
+            },
+            include:{
+                productsVariants:true
+            }
+        });
+
+
+        if(sizeInUse?.productsVariants?.length !== 0){
+            return {
+                status: 400,
+                message: "Size is in use. you cannot delete it.",
+            };
+        }
+
         await prisma.size.delete({
             where:{id}
         })

@@ -72,6 +72,16 @@ export async function updateBlog(blogId:string,data:BlogProps){
 
 
 export async function deleteBlog(blogId:string){
+
+  const currentUser = await getCurrentUser();
+
+  if(currentUser?.role !== "SUPER_ADMIN"){
+    return {
+      status: 400,
+      message: "You don't have permission to delete this blog.",  
+    }
+  }
+
   try {
     await prisma.blogPost.delete({
       where:{

@@ -1,11 +1,11 @@
 "use server";
 import prisma from "@/lib/db";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 import { productSchema } from "@/lib/zod";
 import { z } from "zod";
 
 export async function createProduct(productInput:any) {
-    console.log('action called')
-    console.log('server action', productInput)
+
   // Parse and validate the input data
   const parsedProduct = productSchema.safeParse(productInput);
   if (!parsedProduct.success) {
@@ -42,7 +42,7 @@ export async function createProduct(productInput:any) {
       data: {
         ...product,
         description: description,
-        itemDetails: itemDetailsArray,
+        specifications: itemDetailsArray,
         price: price,
         discount: discount,
         stock: stock,
@@ -121,7 +121,7 @@ export async function updateProduct(productId: string, productInput: any) {
         data: {
           name: product.name,
           description: description,
-          itemDetails: itemDetailsArray,
+          specifications: itemDetailsArray,
           price: price,
           discount: discount,
           stock: stock,
@@ -169,9 +169,18 @@ export async function updateProduct(productId: string, productInput: any) {
 
 
 export async function deleteProduct(productId:string) {
-  console.log('Delete action called');
 
   try {
+
+    const currentUser = await getCurrentUser();
+
+    if (currentUser?.role !== "SUPER_ADMIN") {
+      return {
+        status: 400,
+        message: "You don't have permission to delete this product.",
+      };
+    }
+
     // Check if product exists
     const existingProduct = await prisma.product.findUnique({ where: { id: productId } });
     if (!existingProduct) {

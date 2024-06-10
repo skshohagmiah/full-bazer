@@ -8,6 +8,7 @@ interface updateOrCreateGeneralSettingsProps {
   description?: string | undefined;
   brandName?: string | undefined;
   faviconImage: string;
+  phone:string,
 }
 
 export async function updateOrCreateGeneralSettings(

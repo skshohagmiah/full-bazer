@@ -21,7 +21,7 @@ const HeroSection = ({ billboards }: HeroSectionProps) => {
   const router = useRouter()
   return (
     <MaxWidthWrapper>
-      <section className="relative w-full h-[200px] lg:h-[350px] my-4 mx-auto">
+      <section className="relative w-full h-[150px] sm:h-[250px] lg:h-[350px] my-4 mx-auto">
         <Swiper
           modules={[Pagination, Autoplay]}
           pagination={{ clickable: true }}
@@ -41,7 +41,7 @@ const HeroSection = ({ billboards }: HeroSectionProps) => {
                     src={slide.imageUrl}
                     alt={'billboard-image'}
                     fill
-                    className=""
+                    className="object-fill md:object-cover"
                   />
                 </div>
               </SwiperSlide>
