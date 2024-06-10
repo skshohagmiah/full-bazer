@@ -26,32 +26,26 @@ export default function BillboardsTable({billboards}:BillboardsTableProps) {
       <TableHeader className="bg-slate-100 dark:bg-slate-800">
         <TableRow>
           <TableHead>Image</TableHead>
-          <TableHead>Label</TableHead>
+          <TableHead>Link</TableHead>
           <TableHead>Created At</TableHead> 
-          <TableHead>Start Date</TableHead>
-          <TableHead>End Date</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
 
       {/* TableBody */}
-      <TableBody>
+      <TableBody className="">
         {billboards.map((billboard) => (
           <TableRow key={billboard.id}>
-            <TableCell className="relative h-10 w-10">
+            <TableCell className="relative h-20 w-32 mr-4">
               <Image
                 fill
                 src={billboard.imageUrl}
-                alt={billboard.label}
-                className="object-cover rounded-md"
+                alt={'billboard image'}
+                className="object-contain rounded-md"
               />
             </TableCell>
-            <TableCell className="font-medium">{billboard.label}</TableCell>
+            <TableCell>{billboard.link}</TableCell>
             <TableCell>{billboard.createdAt.toDateString()}</TableCell>
-            <TableCell>{billboard.startDate?.toDateString()}</TableCell>
-            <TableCell>
-              {billboard.endDate?.toDateString() || "Ongoing"} {/* Display "Ongoing" if endDate is null */}
-            </TableCell>
             <TableCell className="flex">
                 <BillboardActions billboardId={billboard.id} />
             </TableCell>

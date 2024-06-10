@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import MaxWidthWrapper from "../others/MaxWidthWrapper";
 import Logo from "../logo/Logo";
 import SearchBar from "./SearchBar";
-import UserOptions from "./UserOptions";
 import { ModeToggle } from "../others/ModeToggle";
 import ShoppingCart from "./ShoppingCart";
 import { cn } from "@/lib/utils";
@@ -22,9 +21,10 @@ import {
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { FaBlog } from "react-icons/fa";
-import MobileSearchBar from "./MobileSearchBar";
 import MobileHeader from "./MobileHeader";
 import { Button } from "../ui/button";
+import UserAccount from "./UserAccount";
+import { CurrentUser } from "@/lib/getCurrentUser";
 
 /**
  * Topheader component
@@ -34,7 +34,7 @@ import { Button } from "../ui/button";
  * to show a search bar when the search icon is clicked.
  */
 
-const Topheader = () => {
+const Topheader = ({ currentUser }: { currentUser: CurrentUser}) => {
   // State variables to control the visibility of the menu and search bar
   const [showMenu, setShowMenu] = React.useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -89,9 +89,6 @@ const Topheader = () => {
   }, []);
 
   return (
-    /**
-     * Render the header component
-     */
     <header
       className={cn(
         "sticky top-0 inset-x-0  bg-white dark:bg-slate-950 z-50",
@@ -102,7 +99,6 @@ const Topheader = () => {
         <div className="flex items-center gap-2">
           {/* Render the mobile header */}
           <MobileHeader />
-
           <Logo />
         </div>
 
@@ -114,8 +110,8 @@ const Topheader = () => {
                 <Link
                   href={link.href}
                   className={cn(
-                    "group inline-flex items-center text-base font-medium hover:opacity-50 duration-200",
-                    link.isActive && "underline underline-offset-4 "
+                    "group inline-flex items-center text-lg font-medium text-gray-600 dark:text-gray-200 hover:opacity-50 duration-200",
+                    link.isActive && "underline underline-offset-4 text-black dark:text-white"
                   )}
                 >
                   {link.name}
@@ -169,13 +165,9 @@ const Topheader = () => {
           )}
 
           <div className="hidden lg:flex items-end justify-end">
-            {/* Render the dark mode toggle */}
             <ModeToggle />
           </div>
-
-          {/* Render user account options */}
-          <UserOptions />
-          {/* Render the shopping cart */}
+          <UserAccount user={currentUser}/>
           <ShoppingCart />
         </div>
       </MaxWidthWrapper>

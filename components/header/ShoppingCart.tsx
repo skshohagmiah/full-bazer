@@ -47,7 +47,7 @@ export default function ShoppingCart() {
         <Button
           variant="ghost"
           size={"icon"}
-          className="rounded-full  bg-accent"
+          className="rounded-full "
         >
           <CartIcon />
           <Badge
@@ -58,7 +58,7 @@ export default function ShoppingCart() {
           </Badge>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-full flex flex-col gap-2 sm:max-w-md">
+      <SheetContent side="right" className=" w-[90%] md:w-full flex flex-col gap-2 sm:max-w-sm">
         <SheetHeader>
           <SheetTitle>Shopping Cart</SheetTitle>
           <SheetDescription>
@@ -112,7 +112,7 @@ export default function ShoppingCart() {
             </CardContent>
           </>
         )}
-      <SheetFooter className="flex-1 flex justify-end sm:flex-col gap-2 mt-auto h-fit sm:pb-8">
+      <SheetFooter className="flex-1 flex justify-end flex-col sm:flex-col gap-2 mt-auto h-fit sm:pb-8">
         <div className="text-lg text-right font-medium text-gray-900 dark:text-white">
           Total: {formatCurrency(calculateTotal())} {/* Use total from hook */}
         </div>

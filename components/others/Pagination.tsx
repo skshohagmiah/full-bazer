@@ -18,6 +18,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page') || 1); // Get current page from searchParams
 
+
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (newPage: number) => {
@@ -51,7 +52,7 @@ const Pagination: React.FC<PaginationProps> = ({
       <Button
         variant="outline"
         onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage >= totalPages}
       >
         Next
       </Button>

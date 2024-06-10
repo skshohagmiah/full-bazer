@@ -72,7 +72,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex w-full flex-col items-start justify-start gap-8"
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center w-full gap-4 lg:gap-8">
             <FormField
               control={form.control}
               name="name"
@@ -90,7 +90,7 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
               control={form.control}
               name="slug"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Slug / Description</FormLabel>
                   <FormControl>
                     <Input placeholder="Category Slug" {...field} />
@@ -101,16 +101,16 @@ export default function CategoryForm({ initialData }: CategoryFormProps) {
             />
           </div>
           {/* Image Uploader */}
-          <div>
+          <div className="w-full">
             <FormField
               control={form.control}
               name="imageUrl"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="w-full">
                   <FormLabel>Image</FormLabel>
                   <FormControl>
                     <UploadDropzone
-                      className="dark:border-gray-500"
+                      className="dark:border-gray-500 w-full"
                       endpoint={"categoryImage"}
                       onClientUploadComplete={(res) =>
                         field.onChange(res[0].url)

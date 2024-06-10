@@ -1,12 +1,12 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const Logo = () => {
   return (
-    <div className='flex items-center gap-1 whitespace-nowrap'>
-        <Image src={'/logo.svg'} alt='brand' width={25} height={25}/>
-        <h2 className=' text-2xl md:text-3xl font-bold text-blue-500'><span className='text-rose-500'>Full</span> Bazer</h2>
-    </div>
+    <Link href={'/'} className='flex items-center gap-1 whitespace-nowrap relative w-[150px] md:w-[200px] h-[100px]'>
+        <Image src={'/logo.svg'} alt='brand' fill/>
+    </Link>
   )
 }
 

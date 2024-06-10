@@ -19,9 +19,13 @@ import { signUpWithEmail } from "@/actions/auth/authActions";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import useSignInModal from "@/hooks/useSignInModal";
+import useSignUpModal from "@/hooks/useSignUpModal";
 
 const EmailSignUpForm = () => {
   const router = useRouter();
+  const {onOpen} = useSignInModal()
+  const {onClose} = useSignUpModal()
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -37,16 +41,19 @@ const EmailSignUpForm = () => {
       values.name,
       values.password
     );
-    if (res?.message && res.status !== 200) {
-      toast(res.message);
-    } else {
-      router.push("/");
+    
+    if(res.status === 200){
+      toast.success(res.message)
+      onClose()
+      router.refresh()
+    }else{
+      toast(res.message)
     }
   }
 
   return (
     <Form {...form}>
-      <form className="mt-8 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="mt-4 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="rounded-md shadow-sm space-y-2">
           <FormField
             control={form.control}
@@ -91,12 +98,15 @@ const EmailSignUpForm = () => {
 
         <div className="flex items-center justify-between">
           <div className="text-sm flex items-center justify-between gap-2 flex-wrap w-full">
-            <Link
-              href="/sign-in"
-              className="font-medium text-indigo-600 dark:text-indigo-500 hover:text-indigo-500"
+            <p
+              onClick={() => {
+                onClose()
+                onOpen()
+              }}
+              className="cursor-pointer font-medium text-indigo-600 dark:text-indigo-500 hover:text-indigo-500"
             >
               Already have an account ?
-            </Link>
+            </p>
           </div>
         </div>
 

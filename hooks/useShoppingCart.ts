@@ -17,6 +17,7 @@ interface ShippingAddress {
   city?: string;
   postalCode?: string;
   country?: string;
+  phone?:string;
 }
 
 // Interface for your BillingAddress model

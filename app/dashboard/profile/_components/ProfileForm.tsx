@@ -117,7 +117,7 @@ export default function ProfileForm() {
   };
 
   return (
-    <DashboardPageWrapper>
+    <DashboardPageWrapper className="bg-white my-4 dark:bg-slate-900">
       <DashboardHeading title="Profile" subtitie="Manage your profile here"/>
       <div className="h-full w-full">
         <Tabs defaultValue="profile" className="space-y-4">

@@ -1,12 +1,21 @@
 import { Search } from "lucide-react";
-import React from "react";
-import { Input } from "../ui/input";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 const SearchBar = () => {
+  const [value, setValue] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.push(`/shop?search=${value}`);
+  };
+
   return (
     <form
-      className="relative border dark:border-gray-500 rounded-full md:py-1.5 pl-10 md:pr-4 w-[30rem] flex items-center shadow-md 
+      onSubmit={handleSearch}
+      className="relative border dark:border-gray-500 rounded-full lg:py-1.5 pl-10 lg:pr-4 w-[30rem] flex items-center shadow-md 
                  focus-within:ring-2 focus-within:ring-blue-500 transition-all duration-200"
     >
       {/* Search Icon */}
@@ -16,6 +25,8 @@ const SearchBar = () => {
 
       {/* Search Input */}
       <input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         placeholder="Search for products..."
         className="w-full bg-transparent pl-5 border-none focus:ring-0 outline-none"
       />

@@ -1,218 +1,200 @@
 "use client";
 
-import React from "react";
 import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { ShoppingCart, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import useShoppingCart from "@/hooks/useShoppingCart";
 import Image from "next/image";
 import MaxWidthWrapper from "@/components/others/MaxWidthWrapper";
+import { formatCurrency } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import useShoppingCart from "@/hooks/useShoppingCart";
+import { useRouter } from "next/navigation";
 
 const CartPage = () => {
-  const {
-    items,
-    removeItem,
-    updateItemQuantity,
-    calculateSubTotal,
-    calculateDiscount,
-    calculateTotal,
-    calculateShipping,
-    calculateTax,
-  } = useShoppingCart();
-
-  const dummyData = [
+  // Dummy data for the cart items
+  const items = [
     {
       product: {
         id: "1",
-        name: "Product 1",
-        description: "Description for Product 1",
-        itemDetails: ["Detail 1", "Detail 2"],
-        sku: "SKU1",
-        categoryId: "cat1",
-        category: { id: "cat1", name: "Category 1", slug: "category-1" },
-        variants: [
-          {
-            id: "var1",
-            productId: "1",
-            sizeId: "size1",
-            colorId: "color1",
-            size: { id: "size1", name: "M", value: "M" },
-            color: { id: "color1", name: "Red", value: "red" },
-            price: 3000,
-            stock: 100,
-            sku: "SKU1-1",
-            image: "url-to-image",
-            orderItems: [],
-          },
-        ],
-        reviews: [],
-        images: [
-          {
-            id: "img1",
-            url: "/shoes.jpg",
-            productId: "1",
-            product: null,
-          },
-        ],
-        price: 3000,
-        discount: 10,
-        totalSales: 50,
-        isFeatured: true,
-        isArchived: false,
-        stock: 100,
-        brandName: "Brand 1",
+        name: "Sample Product 1",
+        price: 4999,
+        images: [{ url: "/elec/apple-watch-9-2.jpg" }],
       },
+      size: { name: "Small" },
+      color: { name: "Red" },
       quantity: 1,
-      size: { id: "size1", name: "M", value: "M" },
-      color: { id: "color1", name: "Red", value: "red" },
-      price: 3000,
     },
     {
       product: {
         id: "2",
-        name: "Product 2",
-        description: "Description for Product 2",
-        itemDetails: ["Detail A", "Detail B"],
-        sku: "SKU2",
-        categoryId: "cat2",
-        category: { id: "cat2", name: "Category 2", slug: "category-2" },
-        variants: [
-          {
-            id: "var2",
-            productId: "2",
-            sizeId: "size2",
-            colorId: "color2",
-            size: { id: "size2", name: "L", value: "L" },
-            color: { id: "color2", name: "Blue", value: "blue" },
-            price: 5000,
-            stock: 200,
-            sku: "SKU2-1",
-            image: "url-to-image",
-            orderItems: [],
-          },
-        ],
-        reviews: [],
-        images: [
-          {
-            id: "img2",
-            url: "/shoes-2.jpg",
-            productId: "2",
-            product: null,
-          },
-        ],
-        price: 5000,
-        discount: 0,
-        totalSales: 20,
-        isFeatured: false,
-        isArchived: false,
-        stock: 200,
-        brandName: "Brand 2",
+        name: "Sample Product 2",
+        price: 5999,
+        images: [{ url: "/elec/apple-watch-9.jpg" }],
       },
+      size: { name: "Medium" },
+      color: { name: "Blue" },
       quantity: 2,
-      size: { id: "size2", name: "L", value: "L" },
-      color: { id: "color2", name: "Blue", value: "blue" },
-      price: 5000,
     },
   ];
+
+  // Cart calculation functions
+  const router = useRouter()
+  const calculateSubTotal = () => items.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+  const calculateDiscount = () => 0; // Assuming no discount for this example
+  const calculateShipping = () => 500; // Fixed shipping cost
+  const calculateTax = () => Math.round(calculateSubTotal() * 0.1); // 10% tax
+  const calculateTotal = () => calculateSubTotal() - calculateDiscount() + calculateShipping() + calculateTax();
+
+  const [quantity, setQuantity] = useState(1);
+  const { addItem } = useShoppingCart();
+  const { updateItemQuantity, removeItem } = useShoppingCart();
 
   return (
     <section className="bg-white py-8 dark:bg-slate-900 my-4">
       <MaxWidthWrapper className="px-4">
-        <h1 className="text-4xl font-bold">Shopping Cart</h1>
-        <small className="block mb-8">Manage your shopping cart items</small>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-4">
-            {dummyData.length > 0 ? (
-              dummyData.map((item) => (
-                <Card
-                  key={item.product.id}
-                  className="flex items-center justify-between gap-2"
-                >
-                  <div className="w-full flex items-center gap-2">
-                    <Image
-                      src={item.product.images[0].url}
-                      alt={item.product.name}
-                      width={128}
-                      height={128}
-                      className="w-32 h-32 object-cover"
-                    />
-                    <CardContent className="w-full flex flex-wrap gap-2 items-center justify-between py-0">
-                      <h2 className="text-2xl font-bold">
-                        {item.product.name}
-                      </h2>
-                      <p className="text-xl font-semibold">
-                        ${(item.price / 100).toFixed(2)}
-                      </p>
-                      <div className="flex items-center">
-                        <Label
-                          htmlFor={`quantity-${item.product.id}`}
-                          className="mr-2"
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Shopping Cart</h1>
+        <small className="block mb-8">Manage your cart items</small>
+        <div className="flex flex-col lg:flex-row lg:items-start">
+          {/* Cart Items Table */}
+          <div className="w-full lg:w-2/3 overflow-x-auto">
+            <Table className="rounded-md border min-w-[600px]">
+              <TableHeader className="bg-slate-200 dark:bg-slate-800">
+                <TableRow>
+                  <TableHead>Product</TableHead>
+                  <TableHead>Price</TableHead>
+                  <TableHead>Quantity</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="text-start">
+                {items.length > 0 ? (
+                  items.map((item) => (
+                    <TableRow
+                      key={item.product.id + item.size?.name + item.color?.name}
+                    >
+                      <TableCell className="flex items-center gap-4 p-4">
+                        <div className="w-14 h-14 relative">
+                          <Image
+                            src={item.product.images[0].url}
+                            alt={item.product.name}
+                            layout="fill"
+                            className="object-cover rounded-sm"
+                          />
+                        </div>
+                        <div>
+                          <p className="font-medium">{item.product.name}</p>
+                          <p className="text-muted-foreground text-sm">
+                            {item.size?.name}, {item.color?.name}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-left">
+                        {formatCurrency(item.product.price)}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              updateItemQuantity(
+                                item.product.id,
+                                item.size,
+                                item.color,
+                                item.quantity - 1
+                              )
+                            }
+                            disabled={item.quantity === 1}
+                          >
+                            <Minus />
+                          </Button>
+                          <span className="text-sm">
+                            {item.quantity}
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              updateItemQuantity(
+                                item.product.id,
+                                item.size,
+                                item.color,
+                                item.quantity + 1
+                              )
+                            }
+                          >
+                            <Plus />
+                          </Button>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            removeItem(item.product, item.size, item.color)
+                          }
                         >
-                          Quantity:
-                        </Label>
-                        <Input
-                          id={`quantity-${item.product.id}`}
-                          type="number"
-                          value={item.quantity}
-                          // onChange={(e) =>
-                          //   updateItemQuantity(item.product.id, item.size, item.color, parseInt(e.target.value))
-                          // }
-                          className="w-16 mr-4"
-                        />
-                      </div>
-                      <Button
-                        variant="outline"
-                        // onClick={() => removeItem(item.product, item.size, item.color)}
-                      >
-                        Remove
-                      </Button>
-                    </CardContent>
-                  </div>
-                </Card>
-              ))
-            ) : (
-              <p>Your cart is empty.</p>
-            )}
+                          <Trash2 className="h-4 w-4 text-red-500" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                      <p className="text-center">Your cart is empty.</p>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
           </div>
-
-          <div>
+          {/* Order Summary */}
+          <div className="w-full lg:w-1/3 mt-8 lg:mt-0 lg:ml-8 lg:sticky lg:top-20">
             <Card>
               <CardHeader>
-                <h2 className="text-2xl font-bold">Order Summary</h2>
+                <h2 className="text-xl font-bold">Order Summary</h2>
               </CardHeader>
               <CardContent>
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between mb-4 text-gray-700 dark:text-gray-300">
                   <p>Subtotal</p>
-                  <p>${(calculateSubTotal() / 100).toFixed(2)}</p>
+                  <p>{formatCurrency(calculateSubTotal())}</p>
                 </div>
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between mb-4 text-gray-700 dark:text-gray-300">
                   <p>Discount</p>
-                  <p>${(calculateDiscount() / 100).toFixed(2)}</p>
+                  <p>- {formatCurrency(calculateDiscount())}</p>
                 </div>
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between mb-4 text-gray-700 dark:text-gray-300">
                   <p>Shipping</p>
-                  <p>${(calculateShipping() / 100).toFixed(2)}</p>
+                  <p>{formatCurrency(calculateShipping())}</p>
                 </div>
-                <div className="flex justify-between mb-4">
+                <div className="flex justify-between mb-4 text-gray-700 dark:text-gray-300">
                   <p>Tax</p>
-                  <p>${(calculateTax() / 100).toFixed(2)}</p>
+                  <p>{formatCurrency(calculateTax())}</p>
                 </div>
-                <div className="flex justify-between font-bold text-xl">
+                <Separator />
+                <div className="flex justify-between font-bold text-xl mt-4">
                   <p>Total</p>
-                  <p>${(calculateTotal() / 100).toFixed(2)}</p>
+                  <p>{formatCurrency(calculateTotal())}</p>
                 </div>
               </CardContent>
               <CardFooter>
-                <Button className="w-full" size={"lg"}>
-                  <Link href={"/checkout"}>Proceed to Checkout</Link>
+                <Button size={'lg'} className="bg-blue-600 text-white w-full" onClick={() => router.push('/checkout')}>
+                  Proceed to Checkout
                 </Button>
               </CardFooter>
             </Card>

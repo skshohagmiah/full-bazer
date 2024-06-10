@@ -7,13 +7,12 @@ import prisma from '@/lib/db'
 
 const NewCategoryPage = async() => {
 
-  const billboards = await prisma.billboard.findMany()
 
   return (
     <DashboardPageWrapper>
       <BreadcrumbComponent links={[{link:'/dashboard',text:'dashboard'},{link:'/dashboard/categories', text:'categories'}]} pageText='new' />
         <DashboardHeading title=' New Category' subtitie='Fillout the form properly'/>
-        <CategoryForm billboards={billboards}/>
+        <CategoryForm initialData={null} />
     </DashboardPageWrapper>
   )
 }

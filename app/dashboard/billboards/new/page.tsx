@@ -18,7 +18,7 @@ const NewBillboardPage = () => {
         title="New Billboard"
         subtitie="Create a new billboard"
       />
-      <BillboardForm />
+      <BillboardForm billboard={null}/>
     </DashboardPageWrapper>
   );
 };

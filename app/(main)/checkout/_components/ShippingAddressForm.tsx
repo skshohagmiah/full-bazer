@@ -16,7 +16,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import useShoppingCart from "@/hooks/useShoppingCart";
 
-
+// Define the schema with the new fields
 const formSchema = z.object({
   address: z.string().min(1, {
     message: "Address is required",
@@ -27,23 +27,29 @@ const formSchema = z.object({
   postalCode: z.string().min(1, {
     message: "Postal code is required",
   }),
-  country: z.string(),
+  country: z.string().min(1, {
+    message: "Country is required",
+  }),
+  phoneNumber: z.string().min(1, {
+    message: "Phone number is required",
+  }).regex(/^\d+$/, "Phone number must contain only numbers"), // Validate phone number as numeric
 });
 
 export default function ShippingAddressForm() {
   const { shippingAddress, setShippingAddress } = useShoppingCart();
-  
-  const form = useForm<typeof formSchema>({
+
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       address: shippingAddress?.address || "",
       city: shippingAddress?.city || "",
       postalCode: shippingAddress?.postalCode || "",
       country: shippingAddress?.country || "",
+      phoneNumber: shippingAddress?.phoneNumber || "",
     },
   });
 
-  const onSubmit = async (data: formSchema) => {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setShippingAddress(data);
   };
 
@@ -90,8 +96,6 @@ export default function ShippingAddressForm() {
               </FormItem>
             )}
           />
-
-          {/* Country Select */}
           <FormField
             control={form.control}
             name="country"
@@ -106,6 +110,19 @@ export default function ShippingAddressForm() {
               </FormItem>
             )}
           />
+        <FormField
+          control={form.control}
+          name="phoneNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input placeholder="Phone Number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         </div>
         <Button type="submit">Save Shipping Address</Button>
       </form>

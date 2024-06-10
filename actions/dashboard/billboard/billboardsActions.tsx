@@ -3,13 +3,8 @@
 import prisma from "@/lib/db";
 
 interface BillboardProps {
-  label: string;
   imageUrl: string;
-  buttonLabel: string;
-  startDate?: Date | undefined;
-  endDate?: Date | undefined;
-  link?: string | undefined;
-  linkType?: "PRODUCT" | "CATEGORY" | "URL" | undefined;
+  link: string;
 }
 
 export async function createBillboard(data: BillboardProps) {

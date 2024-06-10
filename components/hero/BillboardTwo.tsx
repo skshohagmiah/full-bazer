@@ -2,34 +2,29 @@ import React from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import MaxWidthWrapper from "../others/MaxWidthWrapper";
+import prisma from "@/lib/db";
+import Link from "next/link";
 
-const BillboardTwo = () => {
+const BillboardTwo = async() => {
+
+  const billboardTwo = await prisma.billboard.findFirst({
+    take:1,
+    orderBy:{
+      createdAt:'asc'
+    }
+  })
+
   return (
     <MaxWidthWrapper className="p-0 w-full">
-      <div className="relative h-[300px] w-full">
+      <Link href={billboardTwo?.link || '/shop'}>
+      <div className="relative h-[350px] w-full hover:brightness-95 hover:cursor-pointer">
         <Image
-          src={"/shoes.jpg"}
+          src={billboardTwo?.imageUrl || ''}
           alt="shoes"
           fill
-          className="brightness-75 object-cover"
+          className="object-fill"
         />
-        {/* Slide Content */}
-        <div className="absolute top-1/2 md:left-1/2 transform md:-translate-x-1/2 -translate-y-1/2 text-center md:text-start space-y-2 p-4 md:p-0">
-          <h1 className="text-2xl md:text-4xl text-yellow-400 font-extrabold  md:mb-4">
-            The Perfect Fit for Every Foot 
-          </h1>
-          <p className="text-lg md:text-xl text-gray-100 word-wrap">
-            Explore our wide range of comfortable and stylish footwear for men,
-            women, and kids.
-          </p>
-          <Button
-            size={"lg"}
-            className="bg-blue-500 hover:bg-blue-700 rounded-none mt-4 text-lg text-white font-bold py-2 px-4 md:py-4 md:px-8"
-          >
-            Shop Now
-          </Button>
-        </div>
-      </div>
+      </div></Link>
     </MaxWidthWrapper>
   );
 };

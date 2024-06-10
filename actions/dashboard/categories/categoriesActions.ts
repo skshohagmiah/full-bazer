@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/db";
+import { getCurrentUser } from "@/lib/getCurrentUser";
 
 interface CategoryProps{
         name: string;
@@ -14,7 +15,7 @@ export async function createCategory({imageUrl,name,slug}:CategoryProps) {
       data: {
         name:name,
         imageUrl:imageUrl as string,
-        slug:slug
+        description:slug
       },
     });
 
@@ -56,7 +57,18 @@ export async function updateCategory(categoryId:string, data: CategoryProps) {
 
 
 export async function deleteCategory(categoryId:string) {
+
+  const currentUser = await getCurrentUser()
+
   try {
+
+    if(currentUser?.role !== "SUPER_ADMIN"){
+      return {
+        status: 400,
+        message: "You don't have permission to delete this category.", 
+      };
+    }
+
     await prisma.category.delete({
       where: {
         id: categoryId,

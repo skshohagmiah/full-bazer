@@ -27,23 +27,21 @@ import prisma from "@/lib/db";
 import UserStatusChange from "../_components/UserStatusChange";
 
 
-export default async function UserDetailsPage({searchParams}:{searchParams:{userId:string}}) {
+export default async function UserDetailsPage({params}:{params:{userId:string}}) {
 
   const user = await prisma.user.findFirst({
     where:{
-      id:searchParams.userId
+      id:params.userId
     },
     include:{
-      billingAddress:true,
       orders:true,
       reviews:true,
-      shippingAddress:true,
+      address:true,
       comments:true
     }
   })
 
 
-  console.log(searchParams.userId,user)
 
   return (
     <DashbaordPageWrapper>
@@ -86,16 +84,16 @@ export default async function UserDetailsPage({searchParams}:{searchParams:{user
             <p className="text-sm font-medium mt-2">Joined:</p>
             <p className="mt-2">{user?.createdAt.toDateString()}</p>
           </div>
-          {user?.shippingAddress && (
+          {user?.address && (
             <>
               <Separator className="my-4" />
               <div className="flex items-center">
                 <MapPin className="mr-2 h-4 w-4" />
                 <div className="flex items-center gap-4">
                   <p className="text-sm font-medium">Address:</p>
-                  <p>{user.shippingAddress.street}</p>
+                  <p>{user.address.street}</p>
                   <p>
-                    {user.shippingAddress.city}, {user.shippingAddress.state}, {user.shippingAddress.postalCode}, {user.shippingAddress.phone}, {user.shippingAddress.country}
+                    {user.address.city}, {user.address.state}, {user.address.postalCode}, {user.address.phone}, {user.address.country}
                   </p>
                 </div>
               </div>

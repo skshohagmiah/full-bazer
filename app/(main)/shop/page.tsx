@@ -1,6 +1,3 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import SingleProduct from "@/components/products/SingleProduct";
 import Pagination from "@/components/others/Pagination";
 import ShopSidebar from "./_components/ShopSidebar";
@@ -8,8 +5,10 @@ import ShopSidebar from "./_components/ShopSidebar";
 import MaxWidthWrapper from "@/components/others/MaxWidthWrapper";
 import SidebarHeading from "./_components/SidebarHeading";
 import SortOptions from "./_components/SortOptions";
-
-const categories = ["Electronics", "Clothing", "Books", "Toys"]; // Example categories
+import prisma from "@/lib/db";
+import { Category } from "@prisma/client";
+import EmptyState from "@/components/others/EmptyState";
+import ShopProductContainer from "./_components/ShopProductContainer";
 
 const featuredProducts = [
   {
@@ -55,76 +54,110 @@ const featuredProducts = [
   // Add more products as needed
 ];
 
-const Shop = () => {
-  const searchParams = useSearchParams();
-  const [filteredProducts, setFilteredProducts] = useState(featuredProducts);
-  const [sortOption, setSortOption] = useState(""); // For sorting products
-  const [currentPage, setCurrentPage] = useState(1); // For pagination
+interface ShopProps {
+  searchParams: {
+    category: string;
+    minPrice: string;
+    maxPrice: string;
+    rating: string;
+    page: string;
+    search:string,
+    sortBy:string,
+  };
+}
 
-  const productsPerPage = 8; // Number of products per page
+const Shop = async ({ searchParams }: ShopProps) => {
+  const { category, maxPrice, minPrice, page = 1, rating,search,sortBy } = searchParams;
 
-  // useEffect(() => {
-  //   const categoriesParam = searchParams.get("categories")?.split(",") || [];
-  //   const minPrice = Number(searchParams.get("minPrice")) || 0;
-  //   const maxPrice = Number(searchParams.get("maxPrice")) || 1000;
-  //   const rating = Number(searchParams.get("rating")) || 0;
+  const categories = await prisma.category.findMany({});
 
-  //   const filtered = featuredProducts.filter((product) => {
-  //     const inCategory =
-  //       categoriesParam.length === 0 ||
-  //       categoriesParam.includes(product.category);
-  //     const inPriceRange =
-  //       product.price >= minPrice && product.price <= maxPrice;
-  //     const meetsRating = product.rating >= rating;
-  //     return inCategory && inPriceRange && meetsRating;
-  //   });
+  let whereClause = {};
 
-  //   setFilteredProducts(filtered);
-  // }, [searchParams]);
+  if (category) {
+    whereClause = {
+      category: {
+        name: { contains: category },
+      },
+    };
+  };
 
-  // // Handle sorting
-  // useEffect(() => {
-  //   let sortedProducts = [...filteredProducts];
-  //   if (sortOption === "price-asc") {
-  //     sortedProducts.sort((a, b) => a.price - b.price);
-  //   } else if (sortOption === "price-desc") {
-  //     sortedProducts.sort((a, b) => b.price - a.price);
-  //   } else if (sortOption === "rating") {
-  //     sortedProducts.sort((a, b) => b.rating - a.rating);
-  //   }
-  //   setFilteredProducts(sortedProducts);
-  // }, [sortOption]);
+  if(minPrice){
+    whereClause = {
+      ...whereClause,
+      price: {
+        gte: Number(minPrice),
+      },
+    }
+  }
 
-  // // Handle pagination
-  // const indexOfLastProduct = currentPage * productsPerPage;
-  // const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  // const currentProducts = filteredProducts.slice(
-  //   indexOfFirstProduct,
-  //   indexOfLastProduct
-  // );
+  if(maxPrice){
+    whereClause = {
+      ...whereClause,
+      price: {
+        lte: Number(maxPrice),
+      },
+    }
+  }
+
+  if(rating) {
+    whereClause = {
+      ...whereClause,
+      reviews:{
+        some:{
+          rating:{gte:Number(rating)}
+        }
+    }
+  }
+}
+
+if(search){
+  whereClause = {
+    ...whereClause,
+    name:{contains:search},
+  }
+}
+
+
+let sortOptons = {}
+
+if(sortBy){
+  if(sortBy === 'price-asc'){
+    sortOptons = {
+      price: 'asc'
+    }
+  }else{
+    sortOptons = {
+      price : 'desc'
+    }
+  }
+}
+
+  const shopProducts = await prisma.product.findMany({
+    where: whereClause,
+    orderBy:sortOptons,
+    take: 8,
+    skip: Number(page) * 8,
+  });
+
+
+  const totalProducts = await prisma.product.count({
+    where:whereClause,
+  })
 
   return (
     <div className="bg-white dark:bg-gray-900 space-y-4 py-4">
       <SidebarHeading />
       <MaxWidthWrapper className="flex items-start gap-2 justify-between">
         <div className="hidden md:block">
-        <ShopSidebar categories={categories} />
+          <ShopSidebar categories={categories!} />
         </div>
-        <div className="">
-            <SortOptions />
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-6 p-4 border">
-            {featuredProducts.map((product) => (
-              <SingleProduct key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
+        <ShopProductContainer shopProducts={shopProducts}/>
       </MaxWidthWrapper>
-        <Pagination
-          itemsPerPage={productsPerPage}
-          totalItems={filteredProducts.length}
-        />
+      <Pagination
+        itemsPerPage={8}
+        totalItems={totalProducts}
+      />
     </div>
   );
 };
-
 export default Shop;

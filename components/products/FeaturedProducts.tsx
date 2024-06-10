@@ -1,50 +1,16 @@
+import prisma from "@/lib/db";
 import MaxWidthWrapper from "../others/MaxWidthWrapper";
 import SingleProduct from "./SingleProduct";
 
-const FeaturedProducts = () => {
-  const featuredProducts = [
-    {
-      id: 1,
-      image: "/elec/prothonics.jpg",
-      title: "Wireless Headphones",
-      description:'this is a 3.5 mm bluetooth speaker',
-      originalPrice: "$99.99",
-      discountedPrice: "$79.99",
-      rating: 4.5,
-      reviews: 120,
-    },
-    {
-      id: 2,
-      image: "/elec/apple-watch-9-2.jpg",
-      title: "Smart Watch",
-      description:'this is a 3.5 mm bluetooth speaker',
-      originalPrice: "$199.99",
-      discountedPrice: "$149.99",
-      rating: 4.5,
-      reviews: 120,
-    },
-    {
-      id: 3,
-      image: "/elec/song-wh.jpg",
-      title: "Bluetooth Speaker",
-      description:'this is a 3.5 mm bluetooth speaker',
-      originalPrice: "$49.99",
-      discountedPrice: "$39.99",
-      rating: 4.5,
-      reviews: 120,
-    },
-    {
-        id: 4,
-        image: "/elec/song-wh.jpg",
-        title: "Bluetooth Speaker",
-        description:'this is a 3.5 mm bluetooth speaker',
-        originalPrice: "$49.99",
-        discountedPrice: "$39.99",
-        rating: 4.5,
-        reviews: 120,
-      },
-    // Add more products as needed
-  ];
+const FeaturedProducts = async() => {
+
+  const featuredProducts = await prisma.product.findMany({
+    take:8,
+    where:{
+      isFeatured:true,   
+    }
+  })
+
 
   return (
     <section className="py-12 bg-white dark:bg-slate-900">

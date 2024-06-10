@@ -6,29 +6,31 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Category } from '@prisma/client';
+import { Button } from '@/components/ui/button';
 
-const Sidebar = ({ categories = [] }) => {
+const Sidebar = ({ categories = [] }:{categories:Category[]}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>();
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(1000);
   const [selectedRating, setSelectedRating] = useState<number>(0);
 
   useEffect(() => {
     // Extract filter values from URL search parameters
-    const categoriesParam = searchParams.get('categories');
+    const categoriesParam = searchParams.get('category');
     const minPriceParam = searchParams.get('minPrice');
     const maxPriceParam = searchParams.get('maxPrice');
     const ratingParam = searchParams.get('rating');
 
-    if (categoriesParam) setSelectedCategories(categoriesParam.split(','));
+    if (categoriesParam) setSelectedCategory(categoriesParam);
     if (minPriceParam) setMinPrice(Number(minPriceParam));
     if (maxPriceParam) setMaxPrice(Number(maxPriceParam));
     if (ratingParam) setSelectedRating(Number(ratingParam));
   }, [searchParams]);
 
-  const updateSearchParams = (params) => {
+  const updateSearchParams = (params:any) => {
     const newSearchParams = new URLSearchParams(searchParams);
 
     Object.entries(params).forEach(([key, value]) => {
@@ -43,21 +45,17 @@ const Sidebar = ({ categories = [] }) => {
   };
 
   const handleCategoryChange = (category: string) => {
-    const newCategories = selectedCategories.includes(category)
-      ? selectedCategories.filter((cat) => cat !== category)
-      : [...selectedCategories, category];
-
-    setSelectedCategories(newCategories);
-    updateSearchParams({ categories: newCategories.join(',') });
+    setSelectedCategory(category);
+    updateSearchParams({ category:category });
   };
 
-  const handleMinPriceChange = (e) => {
+  const handleMinPriceChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setMinPrice(value);
     updateSearchParams({ minPrice: value });
   };
 
-  const handleMaxPriceChange = (e) => {
+  const handleMaxPriceChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setMaxPrice(value);
     updateSearchParams({ maxPrice: value });
@@ -75,14 +73,14 @@ const Sidebar = ({ categories = [] }) => {
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-3">Categories</h3>
         {categories.map((category) => (
-          <div key={category} className="flex items-center mb-2">
+          <div key={category.id} className="flex items-center mb-2">
             <Checkbox
-              id={category}
-              checked={selectedCategories.includes(category)}
-              onCheckedChange={() => handleCategoryChange(category)}
+              id={category.id}
+              checked={category.name === selectedCategory}
+              onCheckedChange={() => handleCategoryChange(category.name)}
             />
-            <Label htmlFor={category} className="ml-2 text-gray-900 dark:text-gray-100">
-              {category}
+            <Label htmlFor={category.name} className="ml-2 text-gray-900 dark:text-gray-100">
+              {category.name}
             </Label>
           </div>
         ))}
@@ -134,6 +132,9 @@ const Sidebar = ({ categories = [] }) => {
             </div>
           ))}
         </RadioGroup>
+      </div>
+      <div>
+        <Button className='w-full' onClick={() => router.push('/shop')} variant={'outline'}>Reset filter</Button>
       </div>
     </div>
   );

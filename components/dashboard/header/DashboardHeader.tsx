@@ -4,7 +4,6 @@ import Notification from "./Notification";
 import UserPopover from "./UserPopover";
 import { ModeToggle } from "@/components/others/ModeToggle";
 import { Separator } from "@/components/ui/separator";
-import DashboardMessages from "./DashboardMessages";
 import DashboardMobileHeader from "./DashboardMobileHeader";
 import DashboardSearchBar from "./DashboardSearchbar";
 import DashboardHeaderLogo from "./DashboardHeaderLogo";
@@ -20,7 +19,6 @@ const DashboardHeader = () => {
         <DashboardSearchBar />
         <div className="flex items-center justify-end gap-2 md:gap-3">
           <ModeToggle />
-          <DashboardMessages />
           <Notification />
           <UserPopover />
           <DashboardMobileHeader />

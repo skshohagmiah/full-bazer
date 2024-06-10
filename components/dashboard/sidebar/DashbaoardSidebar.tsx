@@ -86,7 +86,7 @@ const DashboardSidebar = () => {
 
   return (
     <aside className=" hidden bg-gray-100  w-80 h-screen sticky top-0 left-0 lg:flex flex-col dark:bg-slate-900">
-      <div className="p-4 my-[5px] flex items-center justify-start text-gray-200">
+      <div className="px-4 -my-3 flex items-center justify-start text-gray-200">
         <Logo />
       </div>
       <Separator className="w-[70%] mx-auto block" />

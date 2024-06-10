@@ -14,24 +14,21 @@ enum Role {
 }
 
 model User {
-  id                String     @id @default(auto()) @map("_id") @db.ObjectId
-  name              String
-  email             String     @unique
-  image             String?
-  password          String?
-  emailVerified     DateTime?
-  accounts          Account[]
-  role              Role       @default(CUSTOMER)
-  orders            Order[]
-  reviews           Review[]
-  blogsPost         BlogPost[]
-  comments          Comment[]
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
-  shippingAddressId String?    @unique @db.ObjectId
-  billingAddressId  String?    @unique @db.ObjectId
-  shippingAddress   Address?   @relation(fields: [shippingAddressId], references: [id], onDelete: Cascade, name: "userShippingAddress")
-  billingAddress    Address?   @relation(fields: [billingAddressId], references: [id], onDelete: Cascade, name: "userBillingAddress")
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  email         String     @unique
+  image         String?
+  password      String?
+  emailVerified DateTime?
+  accounts      Account[]
+  role          Role       @default(CUSTOMER)
+  orders        Order[]
+  reviews       Review[]
+  blogsPost     BlogPost[]
+  comments      Comment[]
+  address       Address?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }
 
 model Account {
@@ -56,50 +53,49 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-
 model resetToken {
-id         String @id @default(auto()) @map("_id") @db.ObjectId
-token String
-expires Int
-createdAt DateTime @default(now())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  token     String
+  expires   Int
+  createdAt DateTime @default(now())
 }
 
 model Address {
-  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
   street     String
   city       String
-  state      String
-  postalCode String
+  state      String?
+  postalCode String?
   country    String
-  phone      String
+  phone      String?
 
-  shippingOrders      Order[] @relation("shipping")
-  billingOrders       Order[] @relation("billing")
-  userShippingAddress User?   @relation(name: "userShippingAddress")
-  userBillingAddress  User?   @relation(name: "userBillingAddress")
+  shippingOrders Order[] @relation("shipping")
+  billingOrders  Order[] @relation("billing")
+  userId         String  @unique @db.ObjectId
+  user           User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Product {
-  id          String           @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  itemDetails String[]
-  sku         String?          @unique
-  categoryId  String           @db.ObjectId
-  category    Category         @relation(fields: [categoryId], references: [id])
-  variants    ProductVariant[]
-  reviews     Review[]
-  images      Image[]
-  price       Int
-  discount    Int?
-  totalSales  Int              @default(0)
-  isFeatured  Boolean
-  isArchived  Boolean
-  stock       Int?
-  brandName   String?
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String
+  specifications String[]
+  categoryId     String           @db.ObjectId
+  category       Category         @relation(fields: [categoryId], references: [id])
+  variants       ProductVariant[]
+  reviews        Review[]
+  images         Image[]
+  orderItems     OrderItem[]
+  price          Int
+  discount       Int?
+  totalSales     Int              @default(0)
+  isFeatured     Boolean
+  isArchived     Boolean
+  stock          Int?
+  brandName      String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -112,9 +108,8 @@ model ProductVariant {
   size       Size?       @relation(fields: [sizeId], references: [id])
   colorId    String?     @db.ObjectId
   color      Color?      @relation(fields: [colorId], references: [id])
-  price      Int // Override product price if different
+  price      Int?
   stock      Int
-  sku        String?     @unique
   image      String?
   orderItems OrderItem[]
 
@@ -132,13 +127,13 @@ model Image {
 }
 
 model Category {
-  id       String    @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  slug     String    @unique
-  imageUrl String?
-  products Product[]
-  blogPost BlogPost?
-  blogId   String?   @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  imageUrl    String?
+  products    Product[]
+  blogPost    BlogPost?
+  blogId      String?   @db.ObjectId
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -163,15 +158,24 @@ model Color {
 }
 
 // Order Models
+
+enum OrderStatus {
+  Pending
+  Processing
+  Shipped
+  Delivered
+  Cancelled
+}
+
 model Order {
   id                String      @id @default(auto()) @map("_id") @db.ObjectId
-  user              User        @relation(fields: [userId], references: [id])
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String      @db.ObjectId
   orderItems        OrderItem[]
   totalAmount       Int
-  paymentMethod     String
+  paymentMethod     String?
   isPaid            Boolean
-  status            String
+  status            OrderStatus @default(Pending)
   shippingAddress   Address     @relation("shipping", fields: [shippingAddressId], references: [id])
   billingAddress    Address     @relation("billing", fields: [billingAddressId], references: [id])
   shippingAddressId String      @db.ObjectId
@@ -184,8 +188,10 @@ model OrderItem {
   id               String         @id @default(auto()) @map("_id") @db.ObjectId
   order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId          String         @db.ObjectId
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
+  productVariant   ProductVariant? @relation(fields: [productVariantId], references: [id])
   productVariantId String         @db.ObjectId
+  product          Product?        @relation(fields: [productId], references: [id])
+  productId        String @db.ObjectId
   quantity         Int
   price            Int
 
@@ -209,19 +215,17 @@ model Review {
 
 //Blogs and Billboards
 model BlogPost {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  excerpt        String    @unique
-  content     String
-  authorId    String    @db.ObjectId
-  author      User      @relation(fields: [authorId], references: [id])
-  categoryId  String    @unique @db.ObjectId
-  category    Category  @relation(fields: [categoryId], references: [id])
-  tags        String[] // Array of tag strings
-  thumbnailImage  String?
-  views       Int       @default(0)
-  likes       Int       @default(0)
-  comments    Comment[]
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  excerpt        String   
+  content        String
+  authorId       String    @db.ObjectId
+  author         User      @relation(fields: [authorId], references: [id])
+  categoryId     String    @unique @db.ObjectId
+  category       Category  @relation(fields: [categoryId], references: [id])
+  tags           String[] // Array of tag strings
+  thumbnailImage String?
+  comments       Comment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -229,22 +233,10 @@ model BlogPost {
 
 model Billboard {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  label       String
   imageUrl    String
-  link        String? // Optional link
-  linkType    LinkType? @default(PRODUCT)
-  buttonLabel String?
-  startDate   DateTime?
-  endDate     DateTime?
-
+  link        String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum LinkType {
-  PRODUCT
-  CATEGORY
-  URL
 }
 
 model Comment {
@@ -253,10 +245,7 @@ model Comment {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   blogId   String   @db.ObjectId
   blogPost BlogPost @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  parentId String?  @db.ObjectId
   content  String
-  likes    Int      @default(0)
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -267,18 +256,28 @@ model GeneralSettings {
   description  String?
   logoImage    String
   faviconImage String
-  brandName    String? // Optional field for the brand name
+  phone String
 }
 
 model EmailSettings {
   id            String  @id @default(auto()) @map("_id") @db.ObjectId
   officialEmail String
   senderName    String?
+  yourEmail      String?
+}
+
+
+enum Currency {
+  USD 
+  EUR
+  JPY
+  BDT
+  CAD
 }
 
 model BillingSettings {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
-  currency String
+  currency Currency @default(USD)
   taxRate  Float  @default(0.0)
 }
 
@@ -331,7 +330,6 @@ model CouponCode {
   updatedAt DateTime @updatedAt
 }
 
-
 enum NotificationType {
   Info
   Warning
@@ -339,10 +337,20 @@ enum NotificationType {
 }
 
 model Notification {
-    id             String    @id @default(auto()) @map("_id") @db.ObjectId
-    message String
-    sender String?
-    read Boolean
-    type NotificationType @default(Info)
-    createdAt DateTime @default(now())
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  message   String
+  sender    String?
+  read      Boolean
+  type      NotificationType @default(Info)
+  createdAt DateTime         @default(now())
+}
+
+
+model Testimonial {
+    id        String           @id @default(auto()) @map("_id") @db.ObjectId
+    UserImage String
+    userName String
+    designation String?
+    message    String
+    createdAt  DateTime @default(now())
 }

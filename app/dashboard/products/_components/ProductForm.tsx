@@ -66,7 +66,7 @@ export default function ProductForm({
     defaultValues: initialData || {
       name: "",
       description: "",
-      itemDetails: "",
+      specifications: "",
       categoryId: "",
       brandName: "",
       images: [""],
@@ -253,10 +253,10 @@ export default function ProductForm({
 
             <FormField
               control={form.control}
-              name="itemDetails"
+              name="specifications"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Item Details</FormLabel>
+                  <FormLabel>Item Specifications</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="E,G. Feature one here, feature two,"

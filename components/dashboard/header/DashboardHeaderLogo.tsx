@@ -9,7 +9,7 @@ const DashboardHeaderLogo = () => {
     const {layoutType} = useLayoutStore()
 
   return (
-    <div className={cn('block', layoutType === 'sidebar' && ' lg:hidden')}>
+    <div className={cn('block -my-6', layoutType === 'sidebar' && ' lg:hidden')}>
       <Logo />
     </div>
   );

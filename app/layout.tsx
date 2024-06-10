@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { SessionProvider } from "next-auth/react";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -34,7 +35,9 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <main>{children}</main>
+          <SessionProvider>
+            <main>{children}</main>
+          </SessionProvider>
         </ThemeProvider>
         <Toaster position="top-right" closeButton richColors />
       </body>

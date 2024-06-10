@@ -19,9 +19,13 @@ import { signInWithEmail } from "@/actions/auth/authActions";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import useSignInModal from "@/hooks/useSignInModal";
+import useSignUpModal from "@/hooks/useSignUpModal";
 
 const EmailSignInForm = () => {
   const router = useRouter();
+  const {onClose} = useSignInModal()
+  const {onOpen} = useSignUpModal()
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -32,16 +36,19 @@ const EmailSignInForm = () => {
 
   async function onSubmit(values: z.infer<typeof signInSchema>) {
     const res = await signInWithEmail(values.email, values.password);
-    if (res?.message && res.status !== 200) {
-      toast(res.message);
-    } else {
-      router.push("/");
+    
+    if(res.status === 200){
+      toast.success(res.message)  
+      onClose()
+      router.refresh()
+    }else{
+      toast.error(res.message)
     }
   }
 
   return (
     <Form {...form}>
-      <form className="mt-8 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="mt-4 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <div className="rounded-md shadow-sm space-y-2">
           <FormField
             control={form.control}
@@ -73,12 +80,15 @@ const EmailSignInForm = () => {
 
         <div className="flex items-center justify-between">
           <div className="text-sm flex items-center justify-between gap-2 flex-wrap w-full">
-            <Link
-              href="/sign-up"
-              className="font-medium text-indigo-600 dark:text-indigo-500 hover:text-indigo-500"
+            <p
+             onClick={() => {
+              onClose();
+              onOpen()
+             }}
+              className="cursor-pointer font-medium text-indigo-600 dark:text-indigo-500 hover:text-indigo-500"
             >
               Don&apos;t have an account ?
-            </Link>
+            </p>
             <Link
               href="/forgot-password"
               className="font-medium text-indigo-600 dark:text-indigo-500 hover:text-indigo-500"

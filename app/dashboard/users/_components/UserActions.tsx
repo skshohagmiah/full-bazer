@@ -32,6 +32,8 @@ const UserActions = ({ user }: { user: User }) => {
     const res = await deleteUser(user.id);
     if (res.status === 200) {
       toast(res.message);
+    }else{
+      toast(res.message);
     }
   };
 
