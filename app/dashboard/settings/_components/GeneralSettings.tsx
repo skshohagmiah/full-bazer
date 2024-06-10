@@ -28,6 +28,7 @@ const formSchema = z.object({
   }),
   description: z.string().optional(),
   brandName: z.string().optional(),
+  phone:z.string().min(11, { message: "Phone number is required" }),
   logoImage: z.string().min(3, { message: "Logo image  is required" }),
   faviconImage: z.string().min(3, { message: "Fevicon image is required" }),
 });
